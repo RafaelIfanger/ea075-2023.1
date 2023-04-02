@@ -68,27 +68,36 @@ O protótipo será montado para análise do parâmetro de turbidez, utilizando u
 Além do sensor de turbidez de água, o sistema será dotado de uma chave de fluxo, para detectar o fluxo de água e de um atuador, no caso, um solenoíde de duas vias, possibilitando o direcionamento do fluxo de água para dois reservatórios a partir da classificação da água em fluxo. 
 [@@@@A descrição funcional do projeto é a principal entrega do E1 e pode ser realizada neste próprio arquivo Markdown, com links para diagramas ou outros arquivos que estejam no próprio repositório]
 
+
 Funcionalidades
 As funcionalidades serão:  @@@@ 
 [@@@@Detalhe todas as tarefas que o sistema será capaz de executar]
+As funcionalidades do sistema se baseiam no objetivo de detectar a qualidade da água a partir da leitura de sensores por um microcontrolador. Desse modo, utilizando o sistema operacional de tempo real FreeRTOS, o sistema recolherá periodicamente os valores de sensores como de pH, turbidez e temperatura, por exemplo. Estes sensores tem propósito de fornecer parametros de qualidade da água com baixo custo e fácil implementacao. Armazenando as entradas, o sistema (microcontrolador), a partir de limiares de qualidade estabelecidos, definirá se a água do fluxo analisado está fora ou nao do aceitável. Se a qualidade for aceita, com uma válvula de duas viás, será liberado a continuidade do fluxo, caso contrário o fluxo é desviado para um local de armazenamento, que, pensando em um caso real, pode servir para uma análise mais detalhada em laboratório.
 
 Configurabilidade
 Como citado, o sistema deverá ser configurado para a aplicação a que se destinar, no caso em desenvolvimento aproveitamento de águas pluviais em uma residência unifamiliar. @@@@
 [@@@@Detalhe, se houver, todas as possíveis configurações do circuito e todos os pontos de alteração da configuração]
+As configuracoes do sistema sao o período de leitura dos sensores, podendo diminuir ou aumentar o tempo entre as leituras de cada sensor, e os limirares aceitáveis dos parametros lidos.
 
 Eventos
 A ser desenvolvido oportunamente 
 [@@@@Quais eventos o sistema deve tratar? Se aplicável, classifique os eventos que são periódicos (procure especificar a periodicidade) e os que são não-periódicos (qual o tempo mínimo entre dois eventos sucessivos)?]
+Nao se espera evento externo além dos dados dos sensores, sendo único evento possível a ser adicionado a configuracao dos limiares com um teclado matricial. Desse modo, fixo sao os eventos de leitura dos sensores, periódicos cuja periodicidade será definida de acordo com o número de amostras que se deseja obter para cada volume V de água que passa pelo sistema. Caso seja implementado o evento de configuracao por teclado matricial, este evento será nao periódico.
 
 Tratamento de Eventos
 A ser desenvolvido oportunamente 
 [@@@@Qual comportamento o sistema deve ter para tratar corretamente cada evento?]
+Para o evento de recepcao dos dados dos sensores, o tratamento será feito por uma tarefa periódica, que, ao longo de um tempo t, deve colher n amostras de modo que, periodicamente de T em T segundos, execute a leitura para armazenamento e tratamento dos dados. O tratamento dos dados será feita por uma outra tarefa nao periódica.
+A qualidade da água definida pelo sistema será apresentada por um display.
+Caso seja implementado a configuracao por teclado matricial, o tratamento será por interrupcao.
+O microcontrolador que se deseja utilizar (ESP32 possui dois núcleos).
 
 Descrição Estrutural do Sistema
 A ser desenvolvido oportunamente 
 [@@@@Junto com a descrição do comportamento do sistema, deve-se especificar, em nível de bloco ou sistema, a estrutura necessária para captar os eventos do mundo externo, para alojar e processar o programa de tratamento de eventos, e para atuar sobre o mundo externo.
 Para essa descrição recomenda-se a criação de diagramas de blocos. Nesse diagrama, devem ser destacados os blocos funcionais que compõem o sistema, incluindo uma síntese das funcionalidades de cada bloco. Além disso, deve-se esclarecer também o relacionamento entre estes blocos, incluindo os principais sinais de comunicação entre os blocos de forma a assegurar a execução de todas as tarefas que o sistema deve realizar.
 Você sabia? Ferramentas como o draw.io permitem integração com o Github.].
+%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22%22%20style%3D%22rounded%3D0%3Bhtml%3D1%3BjettySize%3Dauto%3BorthogonalLoop%3D1%3BfontSize%3D11%3BendArrow%3Dblock%3BendFill%3D0%3BendSize%3D8%3BstrokeWidth%3D1%3Bshadow%3D0%3BlabelBackgroundColor%3Dnone%3BedgeStyle%3DorthogonalEdgeStyle%3BentryX%3D0.5%3BentryY%3D0%3BentryDx%3D0%3BentryDy%3D0%3BexitX%3D1%3BexitY%3D0.5%3BexitDx%3D0%3BexitDy%3D0%3B%22%20edge%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22650%22%20y%3D%22210%22%20as%3D%22sourcePoint%22%2F%3E%3CmxPoint%20x%3D%22310%22%20y%3D%2270%22%20as%3D%22targetPoint%22%2F%3E%3CArray%20as%3D%22points%22%3E%3CmxPoint%20x%3D%22710%22%20y%3D%22210%22%2F%3E%3CmxPoint%20x%3D%22710%22%20y%3D%2250%22%2F%3E%3CmxPoint%20x%3D%22310%22%20y%3D%2250%22%2F%3E%3C%2FArray%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E
 
 Glossário
 Agenda 21: foi um dos principais resultados da conferência Eco-92 ou Rio-92, ocorrida no Rio de Janeiro, Brasil, em 1992. É um documento que estabeleceu a importância de cada país a se comprometer a refletir, global e localmente, sobre a forma pela qual governos, empresas, organizações não-governamentais e todos os setores da sociedade poderiam cooperar no estudo de soluções para os problemas socioambientais (fonte Wikipédia).
